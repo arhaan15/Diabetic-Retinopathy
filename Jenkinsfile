@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "your-dockerhub-username/dr-app"
+        DOCKER_IMAGE = "virajchoudhary/dr-app"
         DOCKER_TAG   = "latest"
     }
 
@@ -16,19 +16,19 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install --no-cache-dir -r requirements.txt'
+                bat 'pip install --no-cache-dir -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest tests/ -v'
+                bat 'python -m pytest tests/ -v'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
+                bat 'docker build -t %DOCKER_IMAGE%:%DOCKER_TAG% .'
             }
         }
 
@@ -39,18 +39,18 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh 'docker push ${DOCKER_IMAGE}:${DOCKER_TAG}'
+                    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                    bat 'docker push %DOCKER_IMAGE%:%DOCKER_TAG%'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                sh '''
-                    docker stop dr-app || true
-                    docker rm dr-app || true
-                    docker run -d --name dr-app -p 8000:8000 ${DOCKER_IMAGE}:${DOCKER_TAG}
+                bat '''
+                    docker stop dr-app || exit 0
+                    docker rm dr-app || exit 0
+                    docker run -d --name dr-app -p 8000:8000 %DOCKER_IMAGE%:%DOCKER_TAG%
                 '''
             }
         }
