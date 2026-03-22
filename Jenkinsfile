@@ -48,14 +48,14 @@ pipeline {
         stage('Test SSH Connection') {
             steps {
                 sshagent(['azure-vm-key']) {
-                    sh '''
+                    bat '''
                     ssh -o StrictHostKeyChecking=no azureuser@20.197.42.126 "echo CONNECTED"
                     '''
                 }
             }
         }
     }
-    
+
     post {
         success {
             echo 'Pipeline completed. Container running on port 8000.'
