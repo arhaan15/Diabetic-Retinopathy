@@ -45,11 +45,11 @@ pipeline {
             }
         }
 
-        stage('Test SSH Connection') {
+        stage('Deploy to Azure VM') {
             steps {
                 sshagent(['azure-vm-key']) {
                     bat '''
-                    ssh -o StrictHostKeyChecking=no azureuser@20.197.42.126 "echo CONNECTED"
+                    ssh -o StrictHostKeyChecking=no azureuser@20.197.42.126 "docker pull virajchoudhary/dr-app:latest && docker stop dr-app || true && docker rm dr-app || true && docker run -d -p 8000:8000 --restart unless-stopped --name dr-app virajchoudhary/dr-app:latest"
                     '''
                 }
             }
