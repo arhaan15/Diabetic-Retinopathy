@@ -45,17 +45,17 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Test SSH Connection') {
             steps {
-                bat '''
-                    docker stop dr-app || exit 0
-                    docker rm dr-app || exit 0
-                    docker run -d --name dr-app -p 8000:8000 %DOCKER_IMAGE%:%DOCKER_TAG%
-                '''
+                sshagent(['azure-vm-key']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no azureuser@20.197.42.126 "echo CONNECTED"
+                    '''
+                }
             }
         }
     }
-
+    
     post {
         success {
             echo 'Pipeline completed. Container running on port 8000.'
