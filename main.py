@@ -8,8 +8,8 @@ from PIL import Image
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-import torchvision.transforms as transforms
 from prometheus_fastapi_instrumentator import Instrumentator
+import torchvision.transforms as transforms
 
 # ==================== Model Definition ====================
 
@@ -122,10 +122,10 @@ app = FastAPI(title="DR Detection API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+Instrumentator().instrument(app).expose(app) 
 
 DEVICE = torch.device("cpu")
 DR_LABELS = {0: "No DR", 1: "Mild DR", 2: "Moderate DR", 3: "Severe DR"}
@@ -223,5 +223,3 @@ async def gradcam(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(500, f"Grad-CAM failed: {str(e)}")
-
-Instrumentator().instrument(app).expose(app, endpoint='/metrics', include_in_schema=False)
