@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
-import { API_BASE_URL, MAX_HISTORY } from "../utils/constants";
+import { MAX_HISTORY } from "../utils/constants";
 
 export function useApi() {
   const [health, setHealth]           = useState(null); // null | true | false
@@ -14,7 +14,7 @@ export function useApi() {
   // Poll health every 15s
   const checkHealth = useCallback(async () => {
     try {
-      await axios.get(`${API_BASE_URL}/health`, { timeout: 4000 });
+      await axios.get(`/api/health`, { timeout: 4000 });
       setHealth(true);
     } catch {
       setHealth(false);
@@ -35,7 +35,7 @@ export function useApi() {
     try {
       const form = new FormData();
       form.append("file", file);
-      const { data } = await axios.post(`${API_BASE_URL}/predict`, form, {
+      const { data } = await axios.post(`/api/predict`, form, {
         headers: { "Content-Type": "multipart/form-data" },
         timeout: 30000,
       });
@@ -58,7 +58,7 @@ export function useApi() {
     try {
       const form = new FormData();
       form.append("file", file);
-      const { data } = await axios.post(`${API_BASE_URL}/gradcam`, form, {
+      const { data } = await axios.post(`/api/gradcam`, form, {
         headers: { "Content-Type": "multipart/form-data" },
         responseType: "blob",
         timeout: 30000,
