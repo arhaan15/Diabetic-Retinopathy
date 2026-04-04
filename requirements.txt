@@ -6,3 +6,4 @@ pillow
 opencv-python-headless
 numpy
 python-multipart
+prometheus-fastapi-instrumentator==6.1.0

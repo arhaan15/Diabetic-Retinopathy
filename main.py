@@ -9,6 +9,7 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 import torchvision.transforms as transforms
+from prometheus_fastapi_instrumentator import Instrumentator
 
 # ==================== Model Definition ====================
 
@@ -222,3 +223,5 @@ async def gradcam(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(500, f"Grad-CAM failed: {str(e)}")
+
+Instrumentator().instrument(app).expose(app, endpoint='/metrics', include_in_schema=False)
