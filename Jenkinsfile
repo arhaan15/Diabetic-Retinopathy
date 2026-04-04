@@ -65,7 +65,7 @@ pipeline {
             steps {
                 bat "az group create --name %AZURE_RG% --location %AZURE_LOCATION%"
                 bat "az container delete --resource-group %AZURE_RG% --name %ACI_NAME% --yes || ver > nul"
-                bat "az container create --resource-group %AZURE_RG% --name %ACI_NAME% --image %DOCKER_IMAGE% --ports 8000 --dns-name-label %DNS_LABEL% --cpu 2 --memory 4 --restart-policy Always --environment-variables PYTHONUNBUFFERED=1"
+                bat "az container create --resource-group %AZURE_RG% --name %ACI_NAME% --image %DOCKER_IMAGE% --ports 8000 --dns-name-label %DNS_LABEL% --cpu 2 --memory 4 --restart-policy Always --environment-variables PYTHONUNBUFFERED=1 --os-type Linux"
             }
         }
 
