@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://dr-app-viraj-c.centralindia.azurecontainer.io/:path*"
+    }
+  ]
+}
