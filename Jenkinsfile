@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/virajchoudhary/diabetic-retinopathy-detection.git'
+                git branch: 'main', url: 'https://github.com/virajchoudhary/diabetic-retinopathy-detector.git'
             }
         }
 
