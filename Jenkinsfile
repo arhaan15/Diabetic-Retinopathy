@@ -85,7 +85,18 @@ pipeline {
             echo '============================================'
         }
         failure {
-            echo 'Pipeline failed. Check logs above.'
+            emailext (
+                subject: "❌ Build Failed: ${env.JOB_NAME}",
+                body: """
+                Build failed!
+ 
+                Job: ${env.JOB_NAME}
+                Build Number: ${env.BUILD_NUMBER}
+                URL: ${env.BUILD_URL}
+                """,
+                to: "virajc188@gmail.com,saniiasjain@gmail.com"
+            )
         }
+        
     }
 }
